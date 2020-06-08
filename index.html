@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="d3.v5.js"></script>
+    <script src="analysis.js"></script>
+</head>
+<body>
+    <p id="loading">Reading File...</p>
+    <select id="state" name="State" size=1>
+    </select>
+    <button id="exec" onclick="execute()">Execute</button>
+    <div id="chart"></div>
+    <div id="bar_chart"></div>
+    <p id="contents"><br>
+        After file reading is completed, selecting state and pressing Execute button creates line/bar chart of each state.<br>
+    </p>
+    <
+    <script>
+        d3.csv("news (2).csv",
+            function(news_data){ return {
+                index: news_data.index,
+                authors: news_data.authors,
+                title: news_data.title,
+                publish_date: new Date(news_data.publish_date),
+                description: news_data.description,
+                text: news_data.text,
+                url: news_data.url
+            };
+            }
+        ).then(function(news_data) {
+            d3.csv("us-counties.csv", function(case_data) { return {
+                    date: new Date(case_data.date),
+                    state: case_data.state,
+                    cases: case_data.cases,
+                    deaths: case_data.deaths
+                };
+                }
+            ).then(function(case_data) {
+                case_data_handling(news_data, case_data);
+            });
+        });
+    </script>
+</body>
+</html>
